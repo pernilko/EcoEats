@@ -19,7 +19,8 @@ export type InventoryItemContent = {
   category: string;
   item: string;
   number: number;
-  unit: string
+  unit: string;
+  expirationDate?: string;
 };
 
 export type InventoryItem = {
@@ -48,7 +49,8 @@ export default function TabTwoScreen() {
           category: "Protein",
           item: "Chicken",
           number: 500,
-          unit: 'g'
+          unit: 'g',
+          expirationDate: '12.06.2024'
         },
       ],
     },
@@ -136,7 +138,7 @@ export default function TabTwoScreen() {
           </Card>
         </View>
       </View>
-      <View style={{ marginTop: 100 }}>
+      <View style={{ marginTop: 10 }}>
         <View style={{ flexDirection: "row", margin: 20 }}>
           <Text style={{ fontSize: 16, fontWeight: "700", marginRight: 5 }}>
             Inventory

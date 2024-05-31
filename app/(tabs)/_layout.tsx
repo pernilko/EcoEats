@@ -19,10 +19,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Recipes",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "home" : "home-outline"}
+              name={focused ? "fast-food" : "fast-food-outline"}
               color={color}
             />
           ),
@@ -39,10 +39,10 @@ export default function TabLayout() {
               <Image source={require("../../assets/images/EcoEats.png")} style={{ height: 75, width: 150}} />
             </View>
           ),
-          title: "Explore",
+          title: "Inventory",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+              name={focused ? "list" : "list-outline"}
               color={color}
             />
           ),

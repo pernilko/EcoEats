@@ -5,8 +5,10 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Button,
+  Pressable,
 } from "react-native";
-import { InventoryItem } from "../(tabs)/explore";
+import { InventoryItem, InventoryItemContent } from "../(tabs)/explore";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -14,10 +16,12 @@ import {
 import {
   ChevronLeftIcon,
   MagnifyingGlassIcon,
+  PlusIcon,
 } from "react-native-heroicons/outline";
 import { Card, List } from "react-native-paper";
 import Categories from "@/components/Categories";
 import { useState } from "react";
+import InventoryItemContentForm from "@/components/InventoryItemContentForm";
 
 const InventoryItemPage = () => {
   const { id } = useLocalSearchParams();
@@ -65,14 +69,16 @@ const InventoryItemPage = () => {
           category: "Fruit",
           item: "Apple",
           number: 2,
-          unit: 'stk'
+          unit: "stk",
+          expirationDate: '12-06-2024'
         },
         {
           id: 2,
           category: "Protein",
           item: "Chicken",
           number: 500,
-          unit: 'g'
+          unit: "g",
+          expirationDate: '12-06-2024'
         },
       ],
     },
@@ -83,8 +89,17 @@ const InventoryItemPage = () => {
     },
   ];
 
+  const [showModal, setShowModal] = useState(false);
+
   var itemId = id ? parseInt(id[0]) : 0;
   const item = inventories.find((i) => i.id === itemId);
+
+  const getFilteredItems = (items : InventoryItemContent[], selectedCategory: string) => {
+    if (selectedCategory === 'All')
+      return items;
+
+    return  items.filter((a) => a.category?.includes(selectedCategory))
+  }
 
   return (
     <ScrollView>
@@ -148,26 +163,106 @@ const InventoryItemPage = () => {
           setSelected={setSelectedCategory}
         />
         <View style={{ margin: 20 }}>
-          <Text style={{ fontWeight: "700", fontSize: 16, marginBottom: 20 }}>
-            Category: {selectedCategory}
-          </Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text
+              style={{
+                fontWeight: "700",
+                fontSize: 16,
+                marginBottom: 20,
+                marginTop: 7,
+                marginRight: 10,
+              }}
+            >
+              Category: {selectedCategory}
+            </Text>
+            <Pressable
+              onPress={() => setShowModal(true)}
+              style={{
+                width: wp(17),
+                height: hp(4.5),
+                borderRadius: 25,
+                borderColor: "#52C95E",
+                borderWidth: 1.5,
+                backgroundColor: "#fff",
+                flexDirection: "row-reverse",
+              }}
+            >
+              <Text
+                style={{
+                  marginTop: 6.5,
+                  fontWeight: "500",
+                  paddingRight: 10,
+                  color: "#52C95E",
+                }}
+              >
+                Add
+              </Text>
+              <PlusIcon
+                color="#52C95E"
+                size={hp(2.5)}
+                strokeWidth={2.5}
+                style={{ marginTop: 7 }}
+              ></PlusIcon>
+            </Pressable>
+          </View>
+
           {item?.content ? (
-            item.content
-              .filter((a) => a.category?.includes(selectedCategory))
+            getFilteredItems(item.content, selectedCategory)
               .map((c) => (
-                <Card>
-                  <Card.Content style={{ flexDirection: "row"}}>
-                    <Text style={{ marginRight: 2 }}>{c.number}</Text>
-                    <Text style={{ marginRight: 5 }}>{c.unit}</Text>
-                    <Text style={{ marginRight: 5 }}>{c.item}</Text>
+                <Card style={{ marginBottom: 5}}>
+                  <Card.Content style={{ flexDirection: "row" }}>
+                    <Text
+                      style={{
+                        marginRight: 2,
+                        color: "#000",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {c.number}
+                    </Text>
+                    <Text
+                      style={{
+                        marginRight: 5,
+                        color: "#000",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {c.unit}
+                    </Text>
+                    <Text
+                      style={{
+                        marginRight: 5,
+                        color: "#000",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {c.item}
+                    </Text>
+                  </Card.Content>
+                  <Card.Content style={{ flexDirection: "row", marginTop: 5 }}>
+                    <Text
+                      style={{
+                        marginRight: 2,
+                        color: "#52C95E",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Expires {c.expirationDate}
+                    </Text>
                   </Card.Content>
                 </Card>
               ))
           ) : (
-            <Text>No recipies</Text>
+            <Text>No items</Text>
           )}
         </View>
       </View>
+      {showModal ? (
+        <InventoryItemContentForm
+          categories={categories.map((a) => a.name)}
+          onClose={() => setShowModal(false)}
+        />
+      ) : null}
     </ScrollView>
   );
 };

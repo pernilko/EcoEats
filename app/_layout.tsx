@@ -46,6 +46,7 @@ export default function RootLayout() {
           options={{ headerTitle: "Inventory", headerShown: false }}
         />
         <Stack.Screen name="registerPage" options={{ title: "Registration" }} />
+        <Stack.Screen name="barCodeScanner" options={{ title: "Scan barcode"}} />
       </Stack>
     </ThemeProvider>
   );
